@@ -197,7 +197,6 @@ devflow-studio/
 │   │       ├── PipelineBuilder.tsx  # React Flow pipeline canvas
 │   │       └── PipelineNode.tsx     # Custom pipeline stage node
 │   └── ...
-├── description.md
 ├── README.md
 └── .gitignore
 ```
