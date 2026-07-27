@@ -2,15 +2,7 @@
 
 > **Build, Validate, and Export DevOps Infrastructure Visually.**
 
-```{=html}
-<p align="center">
-```
-`<img src="assets/cover.png" alt="DevFlow Studio Banner" width="100%">`{=html}
-```{=html}
-</p>
-```
-```{=html}
-<p align="center">
+
 ```
 ![Status](https://img.shields.io/badge/status-MVP-blue)
 ![React](https://img.shields.io/badge/React-Frontend-61DAFB)
@@ -19,8 +11,7 @@
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-Supported-326CE5)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-```{=html}
-</p>
+
 ```
 
 ## Problem Statement
@@ -40,9 +31,23 @@ infrastructure-as-code artifacts and recommending best practices.
 
 AI was used as a software development assistant throughout the project. IBM Bob assisted with generating boilerplate code, suggesting implementations for specific features, explaining unfamiliar APIs, identifying potential bugs, recommending code improvements, generating unit tests, and producing documentation. All AI-generated code and recommendations were reviewed, modified where necessary, and validated through testing before being incorporated into the final application. The project design, architecture, business logic, and final implementation decisions remained the responsibility of the development team.
 
+## Selected Challenge Theme
+
+**Wildcard Challenge**
 
 ## Overview
 DevFlow Studio is a visual DevOps workflow automation platform that enables users to build infrastructure and deployment configurations through an intuitive graphical interface. Instead of manually writing YAML or Dockerfiles, users configure their applications using guided forms and visual builders, while the platform automatically generates production-ready artifacts such as Dockerfiles, Docker Compose, Kubernetes manifests, GitHub Actions workflows, and GitOps resources from an intuitive UI.
+
+## How IBM Bob was used in this project
+
+-   Assisted in generating boilerplate code based on natural-language instructions.
+-   Suggested implementations for APIs and database queries.
+-   Helped debug runtime and syntax errors.
+-   Generated unit test templates.
+-   Created documentation and code comments.
+-   Recommended refactoring to improve readability and maintainability.
+-   Explained unfamiliar libraries and programming concepts.
+-   Suggested optimizations and best practices.
 
 ---
 

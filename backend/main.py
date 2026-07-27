@@ -20,6 +20,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class PersistentVolumeClaimConfig(BaseModel):
+    name: str = "my-app-data"
+    storage_size: str = "1Gi"
+    storage_class_name: str = "standard"
+    access_modes: List[str] = ["ReadWriteOnce"]
+
 class ProjectConfig(BaseModel):
     project_type: str
     language: str
@@ -33,6 +39,7 @@ class ProjectConfig(BaseModel):
     service_type: str = "ClusterIP"
     app_name: str = "my-app"
     container_image: str = "my-app:latest"
+    persistent_volume_claim: Optional[PersistentVolumeClaimConfig] = None
 
 class PipelineConfig(BaseModel):
     stages: List[str]
@@ -164,6 +171,17 @@ spec:
           requests:
             memory: "256Mi"
             cpu: "250m"
+{% if persistent_volume_claim %}
+        volumeMounts:
+        - name: {{ persistent_volume_claim.name }}-volume
+          mountPath: /data
+{% endif %}
+{% if persistent_volume_claim %}
+      volumes:
+      - name: {{ persistent_volume_claim.name }}-volume
+        persistentVolumeClaim:
+          claimName: {{ persistent_volume_claim.name }}
+{% endif %}
 """
 
     k8s_service_template = """apiVersion: v1
@@ -238,10 +256,27 @@ spec:
           {{"{{-"}} toYaml .Values.resources | nindent 10 {{ "}}"}}
 """
 
+    k8s_pvc_template = """apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ persistent_volume_claim.name }}
+spec:
+  accessModes:
+{% for mode in persistent_volume_claim.access_modes %}    - {{ mode }}
+{% endfor %}
+  resources:
+    requests:
+      storage: {{ persistent_volume_claim.storage_size }}
+  storageClassName: {{ persistent_volume_claim.storage_class_name }}
+"""
+
     d_content = Template(dockerfile_template).render(**config.dict())
     c_content = Template(compose_template).render(**config.dict())
     k8s_dep_content = Template(k8s_deployment_template).render(**config.dict())
     k8s_svc_content = Template(k8s_service_template).render(**config.dict())
+    k8s_pvc_content = ""
+    if config.persistent_volume_claim:
+        k8s_pvc_content = Template(k8s_pvc_template).render(**config.dict())
     helm_chart_content = Template(helm_chart_template).render(**config.dict())
     helm_values_content = Template(helm_values_template).render(**config.dict())
     helm_deployment_content = Template(helm_deployment_template).render(**config.dict())
@@ -251,6 +286,7 @@ spec:
         "compose": c_content,
         "k8s_deployment": k8s_dep_content,
         "k8s_service": k8s_svc_content,
+        "k8s_pvc": k8s_pvc_content,
         "helm_chart": helm_chart_content,
         "helm_values": helm_values_content,
         "helm_deployment": helm_deployment_content,
