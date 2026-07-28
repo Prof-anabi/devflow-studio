@@ -1,4 +1,4 @@
-import ProjectWizard from './ProjectWizard';
+content = r"""import ProjectWizard from './ProjectWizard';
 import ContainerConfig from './ContainerConfig';
 import InfrastructureServices from './InfrastructureServices';
 import KubernetesConfig from './KubernetesConfig';
@@ -135,6 +135,10 @@ export default function InfrastructureView(props: InfrastructureViewProps) {
           helmDeploymentCode={props.helmDeploymentCode}
         />
       </div>
-    </div>
   );
 }
+"""
+
+with open('src/components/InfrastructureView.tsx', 'w', newline='') as f:
+    f.write(content)
+print('InfrastructureView written successfully')

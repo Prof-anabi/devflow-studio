@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - '{{ port }}:{{ port }}'
+{% if env_vars %}
+    environment:
+{% for key, value in env_vars.items() %}      - {{ key }}={{ value }}
+{% endfor %}
+{% endif %}
+{% if 'PostgreSQL' in services %}
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dbname
+    ports:
+      - '5432:5432'
+{% endif %}
+{% if 'MySQL' in services %}
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: dbname
+    ports:
+      - '3306:3306'
+{% endif %}
+{% if 'Redis' in services %}
+  redis:
+    image: redis:alpine
+    ports:
+      - '6379:6379'
+{% endif %}
+{% if 'MongoDB' in services %}
+  mongodb:
+    image: mongo:6
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - '27017:27017'
+{% endif %}
+

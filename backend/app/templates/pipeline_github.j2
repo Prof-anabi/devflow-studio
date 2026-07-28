@@ -1,0 +1,58 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+{% if 'Checkout' in stages %}      - name: Checkout code
+        uses: actions/checkout@v4
+{% endif %}{% if 'Install' in stages %}
+      - name: Set up environment
+{% if language == 'Python' %}        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+{% elif language == 'Node.js' %}        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+{% elif language == 'Go' %}        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - run: go mod download
+{% elif language == 'Java' %}        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+{% endif %}{% endif %}{% if 'Test' in stages %}
+      - name: Run tests
+{% if language == 'Python' %}        run: pytest
+{% elif language == 'Node.js' %}        run: npm test
+{% elif language == 'Go' %}        run: go test ./...
+{% elif language == 'Java' %}        run: mvn test
+{% endif %}{% endif %}{% if 'Lint' in stages %}
+      - name: Lint
+{% if language == 'Python' %}        run: pip install flake8 && flake8 .
+{% elif language == 'Node.js' %}        run: npm run lint
+{% endif %}{% endif %}{% if 'SAST' in stages %}
+      - name: SAST Security Scan
+        uses: github/codeql-action/analyze@v3
+{% endif %}{% if 'Build' in stages %}
+      - name: Build Docker image
+        run: docker build -t {{ registry }}/{{ app_name }}:${{ '{{' }} github.sha {{ '}}' }} .
+{% endif %}{% if 'Push Image' in stages %}
+      - name: Push Docker image
+        run: |
+          echo ${{ '{{' }} secrets.DOCKER_PASSWORD {{ '}}' }} | docker login -u ${{ '{{' }} secrets.DOCKER_USERNAME {{ '}}' }} --password-stdin
+          docker push {{ registry }}/{{ app_name }}:${{ '{{' }} github.sha {{ '}}' }}
+{% endif %}{% if 'Deploy' in stages %}
+      - name: Deploy
+        run: kubectl apply -f k8s/
+{% endif %}
+

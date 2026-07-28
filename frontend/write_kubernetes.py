@@ -1,4 +1,4 @@
-import { Sailboat } from 'lucide-react';
+content = """import { Sailboat } from 'lucide-react';
 
 interface KubernetesConfigProps {
   appName: string;
@@ -51,7 +51,6 @@ export default function KubernetesConfig({
             onChange={(e) => setContainerImage(e.target.value)}
           />
         </div>
-      </div>
 
       <div className="form-group">
         <label className="form-label">Replicas</label>
@@ -83,7 +82,6 @@ export default function KubernetesConfig({
             onChange={(e) => setMemoryLimit(e.target.value)}
           />
         </div>
-      </div>
 
       <div className="form-group">
         <label className="form-label">Service Type</label>
@@ -109,7 +107,10 @@ export default function KubernetesConfig({
           <option value="Recreate">Recreate</option>
         </select>
       </div>
-    </div>
   );
 }
+"""
 
+with open('src/components/KubernetesConfig.tsx', 'w', newline='') as f:
+    f.write(content)
+print('File written successfully')

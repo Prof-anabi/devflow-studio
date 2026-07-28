@@ -1,0 +1,39 @@
+stages:
+{% for stage in stages %}  - {{ stage | lower | replace(' ', '_') }}
+{% endfor %}
+{% if 'Checkout' in stages %}checkout:
+  stage: checkout
+  script:
+    - echo "Checking out code..."
+{% endif %}{% if 'Install' in stages %}
+install:
+  stage: install
+  script:
+{% if language == 'Python' %}    - pip install -r requirements.txt
+{% elif language == 'Node.js' %}    - npm install
+{% elif language == 'Go' %}    - go mod download
+{% endif %}{% endif %}{% if 'Test' in stages %}
+test:
+  stage: test
+  script:
+{% if language == 'Python' %}    - pytest
+{% elif language == 'Node.js' %}    - npm test
+{% elif language == 'Go' %}    - go test ./...
+{% endif %}{% endif %}{% if 'Build' in stages %}
+build:
+  stage: build
+  script:
+    - docker build -t {{ registry }}/{{ app_name }}:$CI_COMMIT_SHA .
+{% endif %}{% if 'Push Image' in stages %}
+push_image:
+  stage: push_image
+  script:
+    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - docker push {{ registry }}/{{ app_name }}:$CI_COMMIT_SHA
+{% endif %}{% if 'Deploy' in stages %}
+deploy:
+  stage: deploy
+  script:
+    - kubectl apply -f k8s/
+{% endif %}
+

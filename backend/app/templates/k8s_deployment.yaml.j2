@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ app_name }}-deployment
+  labels:
+    app: {{ app_name }}
+spec:
+  replicas: {{ replicas }}
+  strategy:
+    type: {{ deployment_strategy }}
+{% if deployment_strategy == 'RollingUpdate' %}
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+{% endif %}
+  selector:
+    matchLabels:
+      app: {{ app_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ app_name }}
+    spec:
+      containers:
+      - name: {{ app_name }}-container
+        image: {{ container_image }}
+        ports:
+        - containerPort: {{ port }}
+{% if env_vars %}
+        env:
+{% for key, value in env_vars.items() %}        - name: {{ key }}
+          value: "{{ value }}"
+{% endfor %}
+{% endif %}
+        resources:
+          limits:
+            memory: "{{ memory_limit }}"
+            cpu: "{{ cpu_limit }}"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+{% if persistent_volume_claim %}
+        volumeMounts:
+        - name: {{ persistent_volume_claim.name }}-volume
+          mountPath: /data
+{% endif %}
+{% if persistent_volume_claim %}
+      volumes:
+      - name: {{ persistent_volume_claim.name }}-volume
+        persistentVolumeClaim:
+          claimName: {{ persistent_volume_claim.name }}
+{% endif %}
+

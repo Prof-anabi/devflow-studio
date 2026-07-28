@@ -1,0 +1,34 @@
+# Auto-generated Dockerfile for {{ framework }}
+{% if language == 'Go' %}
+FROM golang:latest
+{% elif language == 'Node.js' %}
+FROM node:latest
+{% else %}
+FROM {{ language | lower }}:latest
+{% endif %}
+WORKDIR /app
+COPY . .
+{% if language == 'Python' %}
+RUN pip install -r requirements.txt
+{% elif language == 'Node.js' %}
+RUN npm install
+{% elif language == 'Go' %}
+RUN go mod download
+RUN go build -o main .
+{% elif language == 'Java' %}
+RUN mvn clean package
+{% endif %}
+{% for key, value in env_vars.items() %}
+ENV {{ key }}="{{ value }}"
+{% endfor %}
+EXPOSE {{ port }}
+{% if language == 'Python' %}
+CMD ["python", "app.py"]
+{% elif language == 'Node.js' %}
+CMD ["npm", "start"]
+{% elif language == 'Go' %}
+CMD ["./main"]
+{% elif language == 'Java' %}
+CMD ["java", "-jar", "target/app.jar"]
+{% endif %}
+

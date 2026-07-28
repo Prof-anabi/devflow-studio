@@ -1,0 +1,26 @@
+replicaCount: {{ replicas }}
+
+strategy: {{ deployment_strategy }}
+
+image:
+  repository: {{ container_image.split(':')[0] }}
+  tag: "{{ container_image.split(':')[1] if ':' in container_image else 'latest' }}"
+  pullPolicy: IfNotPresent
+
+service:
+  type: {{ service_type }}
+  port: 80
+  targetPort: {{ port }}
+
+resources:
+  limits:
+    cpu: {{ cpu_limit }}
+    memory: {{ memory_limit }}
+  requests:
+    cpu: 250m
+    memory: 256Mi
+{% if env_vars %}
+env:
+{% for key, value in env_vars.items() %}  {{ key }}: "{{ value }}"
+{% endfor %}{% endif %}
+
