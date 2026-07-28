@@ -13,9 +13,9 @@
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-Supported-326CE5)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-```{=html} 
+```
 
-
+---
 
 ## Problem Statement
 
