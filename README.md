@@ -4,6 +4,9 @@
 
 
 ```
+```{=html}
+<p align="center">
+```
 ![Status](https://img.shields.io/badge/status-MVP-blue)
 ![React](https://img.shields.io/badge/React-Frontend-61DAFB)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688)
@@ -11,7 +14,8 @@
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-Supported-326CE5)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-
+```{=html}
+</p>
 ```
 
 ## Problem Statement
