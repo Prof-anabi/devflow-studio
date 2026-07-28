@@ -4,16 +4,18 @@
 
 
 
-```{=html}
+<p align="center">
+  <img src="frontend/src/assets/cover.png" alt="DevFlow Studio Cover" width="100%" />
+</p>
 
-![Status](https://img.shields.io/badge/status-MVP-blue)
-![React](https://img.shields.io/badge/React-Frontend-61DAFB)
-![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688)
-![Docker](https://img.shields.io/badge/Docker-Supported-2496ED)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-Supported-326CE5)
-![License](https://img.shields.io/badge/License-MIT-green)
-
-```
+<p align="center">
+  <img src="https://img.shields.io/badge/status-MVP-blue" alt="Status" />
+  <img src="https://img.shields.io/badge/React-Frontend-61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/FastAPI-Backend-009688" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Docker-Supported-2496ED" alt="Docker" />
+  <img src="https://img.shields.io/badge/Kubernetes-Supported-326CE5" alt="Kubernetes" />
+  <img src="https://img.shields.io/badge/License-MIT-green" alt="License" />
+</p>
 
 ---
 
