@@ -236,15 +236,65 @@ DevFlow Studio is an open-source project aiming to make DevOps accessible to eve
 ```
 devflow-studio/
 ├── backend/
-│   └── main.py              # FastAPI server with all endpoints
+│   ├── main.py                    # FastAPI server entrypoint
+│   ├── requirements.txt           # Python dependencies
+│   ├── TODO.md
+│   └── app/
+│       ├── __init__.py
+│       ├── models/
+│       │   ├── __init__.py
+│       │   ├── pipeline.py        # Pipeline data models
+│       │   └── project.py         # Project config models
+│       ├── routes/
+│       │   ├── __init__.py
+│       │   ├── infrastructure.py  # Infra generation endpoints
+│       │   ├── pipeline.py        # Pipeline generation endpoints
+│       │   └── github.py          # GitHub integration endpoints
+│       ├── services/
+│       │   ├── __init__.py
+│       │   ├── generator.py       # Artifact generation engine
+│       │   ├── pipeline.py        # Pipeline YAML generation
+│       │   └── github.py          # GitHub API client
+│       └── templates/
+│           ├── Dockerfile.j2
+│           ├── compose.yaml.j2
+│           ├── k8s_deployment.yaml.j2
+│           ├── k8s_service.yaml.j2
+│           ├── k8s_pvc.yaml.j2
+│           ├── helm_chart.yaml.j2
+│           ├── helm_values.yaml.j2
+│           ├── helm_deployment.yaml.j2
+│           ├── pipeline_github.j2
+│           ├── pipeline_gitlab.j2
+│           └── pipeline_azure.j2
 ├── frontend/
-│   ├── src/
-│   │   ├── App.tsx          # Main app with infrastructure builder
-│   │   ├── index.css        # Dark mode glassmorphism design system
-│   │   └── components/
-│   │       ├── PipelineBuilder.tsx  # React Flow pipeline canvas
-│   │       └── PipelineNode.tsx     # Custom pipeline stage node
-│   └── ...
+│   ├── index.html                 # Vite HTML entry
+│   ├── package.json
+│   ├── vite.config.ts
+│   ├── tsconfig.json / tsconfig.*.json
+│   ├── write_infra.py
+│   ├── write_kubernetes.py
+│   ├── public/
+│   │   ├── favicon.svg
+│   │   └── icons.svg
+│   └── src/
+│       ├── main.tsx               # React entry point
+│       ├── App.tsx                # Root app with routing
+│       ├── App.css
+│       ├── index.css              # Dark mode glassmorphism design system
+│       ├── assets/                # Images and icons
+│       └── components/
+│           ├── ProjectWizard.tsx       # Project setup form
+│           ├── ContainerConfig.tsx     # Container/port config
+│           ├── InfrastructureServices.tsx  # DB/service toggles
+│           ├── KubernetesConfig.tsx    # K8s deployment settings
+│           ├── PersistentVolumeClaim.tsx   # PVC config
+│           ├── CodePreview.tsx         # Live code preview (Monaco)
+│           ├── InfrastructureView.tsx  # Main builder layout
+│           ├── Header.tsx             # App navigation header
+│           ├── GithubPushModal.tsx    # GitHub push dialog
+│           ├── PipelineBuilder.tsx    # React Flow pipeline canvas
+│           └── PipelineNode.tsx       # Custom pipeline stage node
 ├── README.md
 └── .gitignore
 ```
